@@ -1,0 +1,21 @@
+// routes/productImagesRoutes.js
+const { upload } = require('../middleware/multer');
+
+const express = require('express');
+const {
+  addProductImage,
+  updateProductImage,
+  getProductImages,
+  deleteProductImage,
+} = require('../Controllers/ServiceDetail');
+const authenticateToken = require('../middleware/auth');
+
+const router = express.Router();
+
+// router.post('/add', upload.single('img'),authenticateToken, addProductImage);
+router.post('/add',upload.single('img'), addProductImage);
+router.put('/update/:id', upload.single('img'), authenticateToken, updateProductImage);
+router.get('/get', authenticateToken, getProductImages);
+router.delete('/delete/:id', authenticateToken, deleteProductImage);
+
+module.exports = router;
