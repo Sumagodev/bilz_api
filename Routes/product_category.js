@@ -1,47 +1,22 @@
 const express = require('express');
-const { addproduct_category, updateproduct_category, getproduct_category, isActiveStatus, isDeleteStatus } = require('../Controllers/product_category');
-const { validateHeaderContact, validateHeaderContactId } = require('../Validations/headerContactValidation');
-const { validationResult } = require('express-validator');
-const apiResponse = require('../helper/apiResponse');
+const { upload2 } = require('../middleware/multer');
+const { validateProductDetails, validateProductDetailsId } = require('../Validations/productDetailsValidation');
+const {
+  addProductDetails,
+  updateProductDetails,
+  getAllProductDetails,
+  isActiveStatus,
+  deleteProductDetails,getAllProductNames
+} = require('../Controllers/product_category');
 const authenticateToken = require('../middleware/auth');
 
 const router = express.Router();
 
-// Add header contact
-// router.post('/create-headercontact', validateHeaderContact, (req, res, next) => {
-//   const errors = validationResult(req);
-//   if (!errors.isEmpty()) {
-//     return apiResponse.validationErrorWithData(res, 'Validation Error', errors.array());
-//   }
-//   next();
-// }, addproduct_category);
-
-// Add header contact
-router.post('/add', authenticateToken, validateHeaderContact, (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return apiResponse.validationErrorWithData(res, 'Validation Error', errors.array());
-  }
-  next();
-}, addproduct_category);
-
-// Update header contact
-router.put('/update/:id', authenticateToken, validateHeaderContactId, validateHeaderContact, (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return apiResponse.validationErrorWithData(res, 'Validation Error', errors.array());
-  }
-  next();
-}, updateproduct_category);
-
-// Get header contacts
-router.get('/get', getproduct_category);
-router.get('/find', authenticateToken, getproduct_category);
-
+router.post('/add', upload2, authenticateToken, validateProductDetails, addProductDetails);
+router.put('/update/:productId', upload2, authenticateToken, validateProductDetails, validateProductDetailsId, updateProductDetails);
+router.get('/get', getAllProductDetails);
+router.get('/find', authenticateToken, getAllProductDetails);
+router.put('/isactive/:id', authenticateToken, validateProductDetailsId, isActiveStatus);
+router.delete('/isdelete/:id', authenticateToken, validateProductDetailsId, deleteProductDetails);
+router.get("/get-productnames",  getAllProductNames);
 module.exports = router;
-
-// Toggle header contact status
-router.put('/isactive/:id', authenticateToken, validateHeaderContactId, isActiveStatus);
-
-// Toggle header contact delete status
-router.delete('/isdelete/:id', authenticateToken, validateHeaderContactId, isDeleteStatus);

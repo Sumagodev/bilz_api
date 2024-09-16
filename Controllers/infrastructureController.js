@@ -1,98 +1,134 @@
-const Infrastructure = require('../Models/Infrastructure');
+// controllers/eventController.js
+const Event = require('../Models/Infrastructure');
 const apiResponse = require('../helper/apiResponse');
+const { validationResult } = require('express-validator');
 
-exports.addInfrastructure = async (req, res) => {
+exports.addEvent = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return apiResponse.ErrorResponse(res, errors.array().map(err => err.msg).join(', '));
+  }
+
   try {
-    const { title, desc } = req.body;
+    const { name,desc } = req.body;
     const img = req.file ? req.file.path : null;
 
-    const infrastructure = await Infrastructure.create({ img, title, desc, isActive: true, isDelete: false });
-    return apiResponse.successResponseWithData(res, 'Infrastructure added successfully', infrastructure);
-  } catch (error) {
-    console.error('Add infrastructure failed', error);
-    return apiResponse.ErrorResponse(res, 'Add infrastructure failed');
-  }
-};
-
-exports.updateInfrastructure = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { title, desc } = req.body;
-    const img = req.file ? req.file.path : null;
-
-    const infrastructure = await Infrastructure.findByPk(id);
-    if (!infrastructure) {
-      return apiResponse.notFoundResponse(res, 'Infrastructure not found');
-    }
-
-    infrastructure.img = img || infrastructure.img;
-    infrastructure.title = title;
-    infrastructure.desc = desc;
-    await infrastructure.save();
-
-    return apiResponse.successResponseWithData(res, 'Infrastructure updated successfully', infrastructure);
-  } catch (error) {
-    console.error('Update infrastructure failed', error);
-    return apiResponse.ErrorResponse(res, 'Update infrastructure failed');
-  }
-};
-
-exports.getInfrastructure = async (req, res) => {
-  try {
-    const infrastructure = await Infrastructure.findAll({ where: { isDelete: false } });
-    
-    // Base URL for images
-    const baseUrl = `${req.protocol}://${req.get('host')}/`; // Adjust according to your setup
-    console.log("baseUrl....", baseUrl);
-    const infrastructureWithBaseUrl = infrastructure.map(infrastructure => {
-      console.log("infrastructure.img", infrastructure.img);
-      return {
-        ...infrastructure.toJSON(), // Convert Sequelize instance to plain object
-        img: infrastructure.img ? baseUrl + infrastructure.img.replace(/\\/g, '/') : null 
-      };
+    const event = await Event.create({
+      name,
+      desc,
+      img,
+      isActive: true,
+      isDelete: false,
     });
 
-    return apiResponse.successResponseWithData(res, 'Infrastructure retrieved successfully', infrastructureWithBaseUrl);
+    return apiResponse.successResponseWithData(
+      res,
+      'Event added successfully',
+      event
+    );
   } catch (error) {
-    console.error('Get Infrastructure failed', error);
-    return apiResponse.ErrorResponse(res, 'Get Infrastructure failed');
+    console.error('Add event failed', error);
+    return apiResponse.ErrorResponse(res, 'Add event failed');
   }
 };
 
-exports.isActiveStatus = async (req, res) => {
+exports.updateEvent = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return apiResponse.ErrorResponse(res, errors.array().map(err => err.msg).join(', '));
+  }
+
   try {
     const { id } = req.params;
-    const infrastructure = await Infrastructure.findByPk(id);
+    const { name,desc } = req.body;
 
-    if (!infrastructure) {
-      return apiResponse.notFoundResponse(res, 'Infrastructure not found');
+    const img = req.file ? req.file.path : null;
+
+    const event = await Event.findByPk(id);
+    if (!event) {
+      return apiResponse.notFoundResponse(res, 'Event not found');
     }
 
-    infrastructure.isActive = !infrastructure.isActive;
-    await infrastructure.save();
+    event.img = img || event.img;
+    event.name = name;
+    event.desc = desc;
 
-    return apiResponse.successResponseWithData(res, 'Infrastructure status updated successfully', infrastructure);
+    await event.save();
+
+    return apiResponse.successResponseWithData(
+      res,
+      'Event updated successfully',
+      event
+    );
   } catch (error) {
-    console.error('Toggle infrastructure status failed', error);
-    return apiResponse.ErrorResponse(res, 'Toggle infrastructure status failed');
+    console.error('Update event failed', error);
+    return apiResponse.ErrorResponse(res, 'Update event failed');
   }
 };
 
-exports.isDeleteStatus = async (req, res) => {
+exports.getEvents = async (req, res) => {
+  try {
+    const events = await Event.findAll({ where: { isDelete: false } });
+
+    const baseUrl = `${req.protocol}://${req.get('host')}/`;
+    const eventsWithBaseUrl = events.map(event => ({
+      ...event.toJSON(),
+      img: event.img ? baseUrl + event.img.replace(/\\/g, '/') : null,
+    }));
+
+    return apiResponse.successResponseWithData(
+      res,
+      'Events retrieved successfully',
+      eventsWithBaseUrl
+    );
+  } catch (error) {
+    console.error('Get events failed', error);
+    return apiResponse.ErrorResponse(res, 'Get events failed');
+  }
+};
+
+exports.isActiveStatusEvent = async (req, res) => {
   try {
     const { id } = req.params;
-    const infrastructure = await Infrastructure.findByPk(id);
+    const event = await Event.findByPk(id);
 
-    if (!infrastructure) {
-      return apiResponse.notFoundResponse(res, 'Infrastructure not found');
+    if (!event) {
+      return apiResponse.notFoundResponse(res, 'Event not found');
     }
 
-    infrastructure.isDelete = !infrastructure.isDelete;
-    await infrastructure.save();
+    event.isActive = !event.isActive;
+    await event.save();
 
-    return apiResponse.successResponseWithData(res, 'Infrastructure delete status updated successfully', infrastructure);
+    return apiResponse.successResponseWithData(
+      res,
+      'Event active status updated successfully',
+      event
+    );
   } catch (error) {
-    console.error('Toggle infrastructure delete status failed', error);
-    return apiResponse.ErrorResponse(res, 'Toggle infrastructure delete status failed');
+    console.error('Toggle event active status failed', error);
+    return apiResponse.ErrorResponse(res, 'Toggle event active status failed');
+  }
+};
+
+exports.isDeleteStatusEvent = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const event = await Event.findByPk(id);
+
+    if (!event) {
+      return apiResponse.notFoundResponse(res, 'Event not found');
+    }
+
+    event.isDelete = !event.isDelete;
+    await event.save();
+
+    return apiResponse.successResponseWithData(
+      res,
+      'Event delete status updated successfully',
+      event
+    );
+  } catch (error) {
+    console.error('Toggle event delete status failed', error);
+    return apiResponse.ErrorResponse(res, 'Toggle event delete status failed');
   }
 };

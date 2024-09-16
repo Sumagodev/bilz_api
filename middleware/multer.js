@@ -35,8 +35,15 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
   storage,
   fileFilter,
-  // limits: { fileSize: 1024 * 1024 } // 1MB limit
+
 });
+
+const upload1 = multer({
+  storage,
+  fileFilter,
+  limits: { fileSize: 1024 * 1024 } // Set file size limit (1MB)
+}).single('img'); // Accept only one file, field name must match 'img'
+
 const upload2 = multer({
   storage,
   fileFilter,
@@ -50,4 +57,4 @@ const validateImageSize = (req, res, next) => {
     next();
   };
 
-  module.exports = { upload,upload2, validateImageSize };
+  module.exports = { upload,upload1,upload2, validateImageSize };

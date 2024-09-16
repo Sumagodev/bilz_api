@@ -1,22 +1,23 @@
+// models/Event.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
-const Infrastructure = sequelize.define('Infrastructure', {
+const Event = sequelize.define('Vibration1', {
+  name: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   img: {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  title: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
   desc: {
-    type: DataTypes.TEXT,
-    allowNull: false,
+    type: DataTypes.STRING,
+    allowNull: true,
   },
   isActive: {
     type: DataTypes.BOOLEAN,
-    defaultValue: false,
+    defaultValue: true,
   },
   isDelete: {
     type: DataTypes.BOOLEAN,
@@ -26,4 +27,4 @@ const Infrastructure = sequelize.define('Infrastructure', {
   timestamps: true,
 });
 
-module.exports = Infrastructure;
+module.exports = Event;

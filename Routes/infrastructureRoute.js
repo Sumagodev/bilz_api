@@ -1,22 +1,26 @@
+// routes/eventRoutes.js
 const express = require('express');
 const { upload } = require('../middleware/multer');
-const { validateInfrastructure, validateInfrastructureId } = require('../Validations/infrastructureValidation');
 const {
-  addInfrastructure,
-  updateInfrastructure,
-  getInfrastructure,
-  isActiveStatus,
-  isDeleteStatus
+  addEvent,
+  updateEvent,
+  getEvents,
+  isActiveStatusEvent,
+  isDeleteStatusEvent,
 } = require('../Controllers/infrastructureController');
 const authenticateToken = require('../middleware/auth');
+const {
+  validateEvent,
+  validateEventId,
+} = require('../validations/eventValidation');
 
 const router = express.Router();
 
-router.post('/add', upload.single('img'), authenticateToken, validateInfrastructure, addInfrastructure);
-router.put('/update/:id', upload.single('img'), authenticateToken, validateInfrastructure, validateInfrastructureId, updateInfrastructure);
-router.get('/get', getInfrastructure);
-router.get('/find', authenticateToken, getInfrastructure);
-router.put('/isactive/:id', authenticateToken, validateInfrastructureId, isActiveStatus);
-router.delete('/isdelete/:id', authenticateToken, validateInfrastructureId, isDeleteStatus);
+router.post('/add', upload.single('img'), authenticateToken, validateEvent, addEvent);
+router.put('/update/:id', upload.single('img'), authenticateToken, validateEvent, validateEventId, updateEvent);
+router.get('/get', getEvents);
+router.get('/find', authenticateToken, getEvents);
+router.put('/isactive/:id', authenticateToken, validateEventId, isActiveStatusEvent);
+router.delete('/isdelete/:id', authenticateToken, validateEventId, isDeleteStatusEvent);
 
 module.exports = router;
