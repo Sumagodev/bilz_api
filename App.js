@@ -40,7 +40,8 @@ const ServiceDetail = require("./Routes/ServiceDetails");
 const About =require("./Routes/about");
 const implemented =require("./Routes/implemented");
 const Further = require("./Routes/further");
-const Social = require("./Routes/socialcontact")
+const Social = require("./Routes/socialcontact");
+const News=require("./Routes/News");
 
 
 
@@ -65,7 +66,8 @@ app.use("/ServiceDetail",ServiceDetail);
 app.use("/About",About);
 app.use("/implemented",implemented);
 app.use("/Further",Further);
-app.use("/Social",Social)
+app.use("/Social",Social);
+app.use("/News1",News);
 
 
 

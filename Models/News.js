@@ -1,38 +1,18 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
-const Office = sequelize.define('Office', {
-
-   
-
-
-
+const News = sequelize.define('news1', {
   img: {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  name: {
+  title: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  position: {
-    type: DataTypes.STRING,
+  desc: {
+    type: DataTypes.TEXT,
     allowNull: false,
-  },
-  phone: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  msg: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    validate: {
-      isEmail: true,
-    },
   },
   isActive: {
     type: DataTypes.BOOLEAN,
@@ -46,4 +26,4 @@ const Office = sequelize.define('Office', {
   timestamps: true,
 });
 
-module.exports = Office;
+module.exports = News;

@@ -2,22 +2,32 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 
 const HeaderContact = sequelize.define("headercontacts", {
-  title: {
+  img: {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  description: {
+  name: {
     type: DataTypes.STRING,
     allowNull: true,
   },
+  company_Name: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+
   isActive: {
     type: DataTypes.BOOLEAN,
-    defaultValue: true,
+    defaultValue: false,
   },
   isDelete: {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
   },
+}, {
+  timestamps: true,
 });
 
 module.exports = HeaderContact;
+
+
+

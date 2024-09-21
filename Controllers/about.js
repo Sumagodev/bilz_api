@@ -1,121 +1,137 @@
-const HeaderContact = require("../Models/about");
+const Testimonial = require("../Models/about");
 const apiResponse = require("../helper/apiResponse");
 
-exports.addHeaderContact = async (req, res) => {
+exports.addTestimonial = async (req, res) => {
   try {
-    const { title, description } = req.body;
-    const headerContact = await HeaderContact.create({
-      title,
-      description,
+    const { name, company_Name } = req.body;
+    const img = req.file ? req.file.path : null;
+
+    const testimonial = await Testimonial.create({
+      img,
+      name,
+    
+      company_Name,
+  
+      
       isActive: true,
       isDelete: false,
     });
     return apiResponse.successResponseWithData(
       res,
-      "Header contact added successfully",
-      headerContact
+      "Testimonial added successfully",
+      testimonial
     );
   } catch (error) {
-    console.log("Add header contact failed", error);
-    return apiResponse.ErrorResponse(res, "Add header contact failed");
+    console.error("Add testimonial failed", error);
+    return apiResponse.ErrorResponse(res, "Add testimonial failed");
   }
 };
 
-exports.updateHeaderContact = async (req, res) => {
+exports.updateTestimonial = async (req, res) => {
   try {
-    console.log("req.body",req.body.title);
-    
     const { id } = req.params;
-    const headerContact = await HeaderContact.findByPk(id);
-    
-    if (!headerContact) {
-      return apiResponse.notFoundResponse(res, "Header contact not found");
+    const { name,company_Name } = req.body;
+    const img = req.file ? req.file.path : null;
+
+    const testimonial = await Testimonial.findByPk(id);
+    if (!testimonial) {
+      return apiResponse.notFoundResponse(res, "Testimonial not found");
     }
 
-    headerContact.title = req.body.title; // Hardcoded values for testing
-    headerContact.description = req.body.description;
-    await headerContact.save();
+    testimonial.img = img || testimonial.img;
+    testimonial.name = name;
+   
+    testimonial.company_Name = company_Name;
     
+    
+    await testimonial.save();
+
     return apiResponse.successResponseWithData(
       res,
-      "Header contact updated successfully",
-      headerContact
+      "Testimonial updated successfully",
+      testimonial
     );
   } catch (error) {
-    console.log("Update header contact failed", error);
-    return apiResponse.ErrorResponse(res, "Update header contact failed");
+    console.error("Update testimonial failed", error);
+    return apiResponse.ErrorResponse(res, "Update testimonial failed");
   }
 };
 
-
-exports.getHeaderContact = async (req, res) => {
+exports.getTestimonials = async (req, res) => {
   try {
-    const headerContacts = await HeaderContact.findAll({
+    const testimonials = await Testimonial.findAll({
       where: { isDelete: false },
     });
+
+    // Base URL for images
+    const baseUrl = `${req.protocol}://${req.get("host")}/`; // Adjust according to your setup
+    console.log("baseUrl....", baseUrl);
+    const testimonialsWithBaseUrl = testimonials.map((testimonial) => {
+      console.log("testimonial.img", testimonial.img);
+      return {
+        ...testimonial.toJSON(), // Convert Sequelize instance to plain object
+        img: testimonial.img
+          ? baseUrl + testimonial.img.replace(/\\/g, "/")
+          : null,
+      };
+    });
+
     return apiResponse.successResponseWithData(
       res,
-      "Header contacts retrieved successfully",
-      headerContacts
+      "Testimonials retrieved successfully",
+      testimonialsWithBaseUrl
     );
   } catch (error) {
-    console.log("Get header contacts failed", error);
-    return apiResponse.ErrorResponse(res, "Get header contacts failed");
+    console.error("Get testimonials failed", error);
+    return apiResponse.ErrorResponse(res, "Get testimonials failed");
   }
 };
 
-// isActive api
 exports.isActiveStatus = async (req, res) => {
   try {
     const { id } = req.params;
-    const headerContact = await HeaderContact.findByPk(id);
+    const testimonial = await Testimonial.findByPk(id);
 
-    if (!headerContact) {
-      return apiResponse.notFoundResponse(res, "Header contact not found");
+    if (!testimonial) {
+      return apiResponse.notFoundResponse(res, "Testimonial not found");
     }
 
-    // Toggle the isActive status
-    headerContact.isActive = !headerContact.isActive;
-    await headerContact.save();
+    testimonial.isActive = !testimonial.isActive;
+    await testimonial.save();
 
     return apiResponse.successResponseWithData(
       res,
-      "Header contact status updated successfully",
-      headerContact
+      "Testimonial status updated successfully",
+      testimonial
     );
   } catch (error) {
-    console.log("Toggle header contact status failed", error);
-    return apiResponse.ErrorResponse(
-      res,
-      "Toggle header contact status failed"
-    );
+    console.error("Toggle testimonial status failed", error);
+    return apiResponse.ErrorResponse(res, "Toggle testimonial status failed");
   }
 };
 
-// New method to toggle isDelete
 exports.isDeleteStatus = async (req, res) => {
   try {
     const { id } = req.params;
-    const headerContact = await HeaderContact.findByPk(id);
+    const testimonial = await Testimonial.findByPk(id);
 
-    if (!headerContact) {
-      return apiResponse.notFoundResponse(res, "Header contact not found");
+    if (!testimonial) {
+      return apiResponse.notFoundResponse(res, "Testimonial not found");
     }
 
-    // Toggle the isDelete status
-    headerContact.isDelete = !headerContact.isDelete;
-    await headerContact.save();
+    testimonial.isDelete = !testimonial.isDelete;
+    await testimonial.save();
 
     return apiResponse.successResponseWithData(
       res,
-      "Header contact delete status updated successfully",
-      headerContact
+      "Testimonial delete status updated successfully",
+      testimonial
     );
   } catch (error) {
-    console.log("Toggle header contact delete status failed", error);
+    console.error("Toggle testimonial delete status failed", error);
     return apiResponse.ErrorResponse(
       res,
-      "Toggle header contact delete status failed"
+      "Toggle testimonial delete status failed"
     );
   }
 };

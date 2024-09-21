@@ -33,7 +33,7 @@ exports.updateProductName = async (req, res) => {
       return apiResponse.notFoundResponse(res, 'Product name not found');
     }
 
-    product.productName = productName;
+    product.productName = title;
     await product.save();
 
     return apiResponse.successResponseWithData(res, 'Product name updated successfully', product);

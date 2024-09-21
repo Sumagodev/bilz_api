@@ -3,10 +3,10 @@ const apiResponse = require('../helper/apiResponse');
 
 exports.addOffice = async (req, res) => {
   try {
-    const { name, position, phone, email } = req.body;
+    const { name, position, phone, email,msg } = req.body;
     const img = req.file ? req.file.path : null;
 
-    const office = await Office.create({ img, name, position, phone, email, isActive: true, isDelete: false });
+    const office = await Office.create({ img, name, position, phone, email,msg, isActive: true, isDelete: false });
     return apiResponse.successResponseWithData(res, 'Apply now added successfully', office);
   } catch (error) {
     console.error('Apply now  failed', error);
@@ -17,7 +17,7 @@ exports.addOffice = async (req, res) => {
 exports.updateOffice = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, position, phone, email } = req.body;
+    const { name, position, phone, email,msg } = req.body;
     const img = req.file ? req.file.path : null;
 
     const office = await Office.findByPk(id);
@@ -29,6 +29,7 @@ exports.updateOffice = async (req, res) => {
     office.position = position;
     office.phone = phone;
     office.email = email;
+    office.msg=msg;
     office.img = img || office.img;
     await office.save();
 
