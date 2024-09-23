@@ -42,6 +42,7 @@ const implemented =require("./Routes/implemented");
 const Further = require("./Routes/further");
 const Social = require("./Routes/socialcontact");
 const News=require("./Routes/News");
+const Special = require("./Routes/Special");
 
 
 
@@ -68,6 +69,7 @@ app.use("/implemented",implemented);
 app.use("/Further",Further);
 app.use("/Social",Social);
 app.use("/News1",News);
+app.use("/Special",Special);
 
 
 

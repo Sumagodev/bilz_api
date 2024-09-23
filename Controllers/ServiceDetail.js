@@ -5,42 +5,90 @@ const ServiceName = require('../Models/servicename');
 const apiResponse = require('../helper/apiResponse');
 const { validationResult } = require('express-validator');
 
-exports.getProductImages = async (req, res) => {
-  try {
-    const baseUrl = `${req.protocol}://${req.get('host')}/`;
+// exports.getProductImages = async (req, res) => {
+//   try {
+//     const baseUrl = `${req.protocol}://${req.get('host')}/`;
 
-    const productImages = await ProductImages.findAll({
-      include: [{
-        model: ServiceName,
-        as: 'service',
-        attributes: ['title'], // Fetch only the title from ServiceName
-      }],
-    });
+//     const productImages = await ProductImages.findAll({
+//       include: [{
+//         model: ServiceName,
+//         as: 'service',
+//         attributes: ['title'],
+//       }],
+//     });
 
-    // Map productImages to include ServiceName title and prepend base URL to img field
-    const imagesWithDetails = productImages.map(image => ({
-      id: image.id,
-      img: baseUrl + image.img,
-      productName: image.productName,
-      serviceNameTitle: image.service.title, // Adding the ServiceName title
-      desc: image.desc,
-      createdAt: image.createdAt,
-      updatedAt: image.updatedAt,
-    }));
+//     const imagesWithDetails = productImages.map(image => ({
+//       id: image.id,
+//       img: baseUrl + image.img,
+//       productName: image.productName,
+//       serviceNameTitle: image.service.title,
+//       desc: image.desc,
+//       createdAt: image.createdAt,
+//       updatedAt: image.updatedAt,
+//     }));
 
-    return apiResponse.successResponseWithData(
-      res,
-      "Product images retrieved successfully",
-      imagesWithDetails
-    );
-  } catch (error) {
-    console.error("Get product images failed", error);
-    return apiResponse.ErrorResponse(res, "Get product images failed");
-  }
-};
+//     return apiResponse.successResponseWithData(
+//       res,
+//       "Product images retrieved successfully",
+//       imagesWithDetails
+//     );
+//   } catch (error) {
+//     console.error("Get product images failed", error); // Log the entire error
+//     return apiResponse.ErrorResponse(res, "Get product images failed");
+//   }
+// };
 
 // controllers/productImagesController.js
 
+exports.findProductImages = async (req, res) => {
+  try {
+      const { productName, title } = req.query;
+
+      const query = {};
+      if (productName) {
+          query.productName = productName;
+      }
+      if (title) {
+          query.title = title;
+      }
+
+      const productImages = await ProductImages.findAll({
+          where: query
+      });
+
+      if (productImages.length === 0) {
+          return apiResponse.notFoundResponse(res, "No product images found");
+      }
+
+      return apiResponse.successResponseWithData(
+          res,
+          "Product images retrieved successfully",
+          productImages
+      );
+  } catch (error) {
+      console.error("Find product images failed", error);
+      return apiResponse.ErrorResponse(res, "Find product images failed");
+  }
+};
+
+exports.findAllProductImages = async (req, res) => {
+  try {
+      const productImages = await ProductImages.findAll();
+
+      if (productImages.length === 0) {
+          return apiResponse.notFoundResponse(res, "No product images found");
+      }
+
+      return apiResponse.successResponseWithData(
+          res,
+          "Product images retrieved successfully",
+          productImages
+      );
+  } catch (error) {
+      console.error("Find all product images failed", error);
+      return apiResponse.ErrorResponse(res, "Find all product images failed");
+  }
+};
 
 exports.addProductImage = async (req, res) => {
     // Validate request
@@ -149,4 +197,6 @@ exports.deleteProductImage = async (req, res) => {
     return apiResponse.ErrorResponse(res, "Delete product image failed");
   }
 };
+
+
 

@@ -5,7 +5,8 @@ const express = require('express');
 const {
   addProductImage,
   updateProductImage,
-  getProductImages,
+  findProductImages,
+  findAllProductImages,
   deleteProductImage,
 } = require('../Controllers/ServiceDetail');
 const authenticateToken = require('../middleware/auth');
@@ -14,8 +15,10 @@ const router = express.Router();
 
 // router.post('/add', upload.single('img'),authenticateToken, addProductImage);
 router.post('/add',upload.single('img'), addProductImage);
+router.get('/get', findAllProductImages);
+router.get('/find', authenticateToken, findAllProductImages);
 router.put('/update/:id', upload.single('img'), authenticateToken, updateProductImage);
-router.get('/get', authenticateToken, getProductImages);
+// router.get('/get', authenticateToken, getProductImages);
 router.delete('/delete/:id', authenticateToken, deleteProductImage);
 
 module.exports = router;

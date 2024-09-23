@@ -34,8 +34,10 @@ const ProductImages1 = sequelize.define('ProductImages', {
   timestamps: true,
 });
 
-module.exports = ProductImages1;
+
 
 // Ensure associations are set up
-ServiceName.hasMany(ProductImages1, { foreignKey: 'ProductDetailId' });
+ProductImages1.belongsTo(ServiceName);
+// ServiceName.hasMany(ProductImages1, { foreignKey: 'ProductDetailId' });
 // ProductImages1.belongsTo(ServiceName, { foreignKey: 'ProductDetailId' });
+module.exports = ProductImages1;
