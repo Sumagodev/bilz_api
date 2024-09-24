@@ -1,43 +1,51 @@
-// models/ProductImages.js
+// // models/ProductImages.js
+
+// const { DataTypes } = require('sequelize');
+// const sequelize = require('../config/database');
+
+// const ProductImages = sequelize.define('ProductImages', {
+//   img: {
+//     type: DataTypes.STRING,
+//     allowNull: false,
+//   },
+//   ProductDetailId: {
+//     type: DataTypes.INTEGER,
+//     allowNull: false,
+//     references: {
+//       model: 'ProductDetails',
+//       key: 'id'
+//     }
+//   },
+//   productName: {
+//     type: DataTypes.STRING,
+//     allowNull: false,
+//   }
+// }, {
+//   timestamps: true,
+// });
+
+// module.exports = ProductImages;
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
-const ServiceName = require('./servicename'); // Adjust the import to your project structure
+const ProductName = require('./servicename');
 
-const ProductImages1 = sequelize.define('ProductImages', {
-  img: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  ProductDetailId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: ServiceName, // This should match the Sequelize model you're referencing
-      key: 'id'
+const ProductImage = sequelize.define('service_detail', {
+    img: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+    title: {
+        type: DataTypes.STRING,
+        allowNull: false,
     },
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE'
-  },
-  productName: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  title: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  desc: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  }
-}, {
-  timestamps: true,
+    description: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    }
 });
 
+// Setting up the foreign key
+ProductImage.belongsTo(ProductName, { foreignKey: 'productId', onDelete: 'CASCADE' });
+ProductName.hasOne(ProductImage, { foreignKey: 'productId' });
 
-
-// Ensure associations are set up
-ProductImages1.belongsTo(ServiceName);
-// ServiceName.hasMany(ProductImages1, { foreignKey: 'ProductDetailId' });
-// ProductImages1.belongsTo(ServiceName, { foreignKey: 'ProductDetailId' });
-module.exports = ProductImages1;
+module.exports = ProductImage;

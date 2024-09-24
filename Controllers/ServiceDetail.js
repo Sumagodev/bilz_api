@@ -1,202 +1,123 @@
-// controllers/productImagesController.js
-// controllers/productImagesController.js
-const ProductImages = require('../Models/ServiceDetail');
-const ServiceName = require('../Models/servicename');
-const apiResponse = require('../helper/apiResponse');
-const { validationResult } = require('express-validator');
+// // controllers/productDetailController.js
+const ProductDetail = require('../Models/ServiceDetail');
+const Product = require('../Models/servicename');
 
-// exports.getProductImages = async (req, res) => {
-//   try {
-//     const baseUrl = `${req.protocol}://${req.get('host')}/`;
-
-//     const productImages = await ProductImages.findAll({
-//       include: [{
-//         model: ServiceName,
-//         as: 'service',
-//         attributes: ['title'],
-//       }],
-//     });
-
-//     const imagesWithDetails = productImages.map(image => ({
-//       id: image.id,
-//       img: baseUrl + image.img,
-//       productName: image.productName,
-//       serviceNameTitle: image.service.title,
-//       desc: image.desc,
-//       createdAt: image.createdAt,
-//       updatedAt: image.updatedAt,
-//     }));
-
-//     return apiResponse.successResponseWithData(
-//       res,
-//       "Product images retrieved successfully",
-//       imagesWithDetails
-//     );
-//   } catch (error) {
-//     console.error("Get product images failed", error); // Log the entire error
-//     return apiResponse.ErrorResponse(res, "Get product images failed");
-//   }
-// };
-
-// controllers/productImagesController.js
-
-exports.findProductImages = async (req, res) => {
+// Create new product details for a product
+exports.createProductDetail = async (req, res) => {
   try {
-      const { productName, title } = req.query;
-
-      const query = {};
-      if (productName) {
-          query.productName = productName;
+      const { title, description, productId } = req.body;
+      const img = req.file ? req.file.path : null;
+      
+      // Find the product in the ServiceName (or ProductName) table
+      const product = await Product.findByPk(productId);
+      if (!product) {
+          return res.status(404).json({ message: "Product not found" });
       }
-      if (title) {
-          query.title = title;
-      }
 
-      const productImages = await ProductImages.findAll({
-          where: query
+      // Create the product detail
+      const productDetail = await ProductDetail.create({
+          img,
+          title,
+          description,
+          productId,
       });
 
-      if (productImages.length === 0) {
-          return apiResponse.notFoundResponse(res, "No product images found");
-      }
+      // Fetch the product's title to include in the response
+      const productWithTitle = await ProductDetail.findOne({
+          where: { id: productDetail.id },
+          include: [
+              {
+                  model: Product, // Include the ServiceName or ProductName table
+                  attributes: ['title'], // Include only the 'title' field from the ServiceName table
+              },
+          ],
+      });
 
-      return apiResponse.successResponseWithData(
-          res,
-          "Product images retrieved successfully",
-          productImages
-      );
+      res.status(201).json(productWithTitle);
   } catch (error) {
-      console.error("Find product images failed", error);
-      return apiResponse.ErrorResponse(res, "Find product images failed");
+      res.status(500).json({ message: error.message });
   }
 };
 
-exports.findAllProductImages = async (req, res) => {
+// Get all details for a specific product
+// exports.getProductDetailsByProductId = async (req, res) => {
+//     try {
+//         const productDetails = await ProductDetail.findAll({
+//             where: { productId: req.params.productId }
+//         });
+//         if (productDetails.length === 0) {
+//             return res.status(404).json({ message: "No details found for this product" });
+//         }
+//         res.status(200).json(productDetails);
+//     } catch (error) {
+//         res.status(500).json({ message: error.message });
+//     }
+// };
+exports.getProductDetailsByProductId = async (req, res) => {
   try {
-      const productImages = await ProductImages.findAll();
-
-      if (productImages.length === 0) {
-          return apiResponse.notFoundResponse(res, "No product images found");
+      const productDetails = await ProductDetail.findAll({
+          where: { productId: req.params.productId },
+          include: [
+              {
+                  model: Product, // The ProductName or ServiceName table
+                  attributes: ['title'], // Include only the 'title' field from the ServiceName table
+              },
+          ],
+      });
+      if (productDetails.length === 0) {
+          return res.status(404).json({ message: "No details found for this product" });
       }
-
-      return apiResponse.successResponseWithData(
-          res,
-          "Product images retrieved successfully",
-          productImages
-      );
+      res.status(200).json(productDetails);
   } catch (error) {
-      console.error("Find all product images failed", error);
-      return apiResponse.ErrorResponse(res, "Find all product images failed");
+      res.status(500).json({ message: error.message });
+  }
+};
+exports.getAllProductDetails = async (req, res) => {
+  try {
+      const productDetails = await ProductDetail.findAll({
+          include: [
+              {
+                  model: Product, // Include the ServiceName or ProductName table
+                  attributes: ['title'], // Include only the 'title' field from the ServiceName table
+              },
+          ],
+      });
+      res.status(200).json(productDetails);
+  } catch (error) {
+      res.status(500).json({ message: error.message });
   }
 };
 
-exports.addProductImage = async (req, res) => {
-    // Validate request
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return apiResponse.ErrorResponse(res, errors.array().map(err => err.msg).join(', '));
-    }
 
+// Update product details by ID
+exports.updateProductDetail = async (req, res) => {
     try {
-        const { productName, title, desc } = req.body;
-        const img = req.file ? req.file.path : null; // If using file upload
-
-        // Validate img field
-        if (!img) {
-            return apiResponse.validationErrorWithData(res, "Image URL cannot be null", null);
+        const { img, title, description } = req.body;
+        const productDetail = await ProductDetail.findByPk(req.params.id);
+        if (!productDetail) {
+            return res.status(404).json({ message: "Product detail not found" });
         }
 
-        // Find service by title
-        const service = await ServiceName.findOne({ where: { title } });
-        if (!service) {
-            return apiResponse.notFoundResponse(res, "ServiceName not found");
-        }
-
-        // Create new product image entry
-        const productImage = await ProductImages.create({
-            ProductDetailId: service.id,
-            img,
-            productName,
-            title,
-            desc
-        });
-
-        return apiResponse.successResponseWithData(
-            res,
-            "Product image added successfully",
-            productImage
-        );
+        productDetail.img = img;
+        productDetail.title = title;
+        productDetail.description = description;
+        await productDetail.save();
+        res.status(200).json(productDetail);
     } catch (error) {
-        console.error("Add product image failed", error);
-        return apiResponse.ErrorResponse(res, "Add product image failed");
+        res.status(500).json({ message: error.message });
     }
 };
 
-// Other methods remain unchanged
-
-
-exports.updateProductImage = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return apiResponse.ErrorResponse(res, errors.array().map(err => err.msg).join(', '));
-  }
-
-  try {
-    const { id } = req.params;
-    const { productName, title, desc } = req.body;
-    const img = req.file ? req.file.path : null;
-
-    const productImage = await ProductImages.findByPk(id, {
-      include: [{
-        model: ServiceName,
-        as: 'service',
-        attributes: ['title'],
-      }],
-    });
-    if (!productImage) {
-      return apiResponse.notFoundResponse(res, "Product image not found");
+// Delete product detail by ID
+exports.deleteProductDetail = async (req, res) => {
+    try {
+        const productDetail = await ProductDetail.findByPk(req.params.id);
+        if (!productDetail) {
+            return res.status(404).json({ message: "Product detail not found" });
+        }
+        await productDetail.destroy();
+        res.status(200).json({ message: "Product detail deleted" });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
-
-    const product = await ServiceName.findOne({ where: { title } });
-    if (!product) {
-      return apiResponse.notFoundResponse(res, "ServiceName not found");
-    }
-
-    productImage.img = img || productImage.img;
-    productImage.productName = productName;
-    productImage.ProductDetailId = product.id; // Update the ProductDetailId if title changes
-    productImage.title = title;
-    productImage.desc = desc;
-    await productImage.save();
-
-    return apiResponse.successResponseWithData(
-      res,
-      "Product image updated successfully",
-      productImage
-    );
-  } catch (error) {
-    console.error("Update product image failed", error);
-    return apiResponse.ErrorResponse(res, "Update product image failed");
-  }
 };
-
-exports.deleteProductImage = async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    const productImage = await ProductImages.findByPk(id);
-    if (!productImage) {
-      return apiResponse.notFoundResponse(res, "Product image not found");
-    }
-
-    await productImage.destroy();
-
-    return apiResponse.successResponse(res, "Product image deleted successfully");
-  } catch (error) {
-    console.error("Delete product image failed", error);
-    return apiResponse.ErrorResponse(res, "Delete product image failed");
-  }
-};
-
-
-

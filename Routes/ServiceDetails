@@ -1,24 +1,42 @@
-// routes/productImagesRoutes.js
-const { upload } = require('../middleware/multer');
+// const express = require('express');
+// const { validateProductName, validateProductNameId } = require('../Validations/productNameValidation');
+// const {
+//   addProductName,
+//   getProductNames,
+//   updateProductName,
+//   isActiveStatus,
+//   isDeleteStatus,
+// } = require('../Controllers/ProductName');
+// const authenticateToken = require('../middleware/auth');
 
+// const router = express.Router();
+
+// router.post('/add', authenticateToken, validateProductName, addProductName);
+// router.get('/get', getProductNames);
+// router.get('/find', authenticateToken, getProductNames);
+// router.put('/update/:id', authenticateToken, validateProductNameId, validateProductName, updateProductName);
+// router.put('/isactive/:id', authenticateToken, validateProductNameId, isActiveStatus);
+// router.delete('/isdelete/:id', authenticateToken, validateProductNameId, isDeleteStatus);
+
+// module.exports = router;
 const express = require('express');
-const {
-  addProductImage,
-  updateProductImage,
-  findProductImages,
-  findAllProductImages,
-  deleteProductImage,
-} = require('../Controllers/ServiceDetail');
+// const productController = require('../Controllers/ProductName');
+// const productDetailController=require('../Controllers/ProductDetail1');
+const productImagesController=require('../Controllers/ServiceDetail');
+const { validateProductName, validateProductNameId } = require('../Validations/productNameValidation');
 const authenticateToken = require('../middleware/auth');
-
+const { upload } = require('../middleware/multer');
 const router = express.Router();
 
-// router.post('/add', upload.single('img'),authenticateToken, addProductImage);
-router.post('/add',upload.single('img'), addProductImage);
-router.get('/get', findAllProductImages);
-router.get('/find', authenticateToken, findAllProductImages);
-router.put('/update/:id', upload.single('img'), authenticateToken, updateProductImage);
-// router.get('/get', authenticateToken, getProductImages);
-router.delete('/delete/:id', authenticateToken, deleteProductImage);
+
+
+router.post('/add',  upload.single('img'),productImagesController.createProductDetail);
+router.get('/get/:productId', productImagesController.getProductDetailsByProductId);
+router.put('/update/:id', productImagesController.updateProductDetail);
+router.get('/find', productImagesController.getAllProductDetails);
+
+
+router.delete('/isdelete/:id', productImagesController.deleteProductDetail);
+
 
 module.exports = router;

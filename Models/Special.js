@@ -10,7 +10,7 @@ const Special = sequelize.define('Servicespecial', {
     type: DataTypes.STRING,
     allowNull: false,
   },
- 
+
 
   isActive: {
     type: DataTypes.BOOLEAN,

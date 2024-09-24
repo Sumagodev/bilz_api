@@ -24,7 +24,7 @@ const login = require("./Routes/User");
 const carrousel = require("./Routes/carrousel");
 const home_about =require("./Routes/HeaderContact");
 const productName =require("./Routes/productName");
-const productDetails =require("./Routes/product_category");
+// const productDetails =require("./Routes/product_category");
 const apply_now = require("./Routes/apply_now");
 const contact_us=require("./Routes/contactPersonRoutes");
 const solution = require("./Routes/eventRoutes");
@@ -43,6 +43,7 @@ const Further = require("./Routes/further");
 const Social = require("./Routes/socialcontact");
 const News=require("./Routes/News");
 const Special = require("./Routes/Special");
+// const Product_Image= require("./Routes/product_Image")
 
 
 
@@ -52,7 +53,7 @@ app.use("/v_analysis",Analysis)
 app.use("/carrousel", carrousel);
 app.use("/home_about",home_about);
 app.use("/productName",productName);
-app.use("/productDetails",productDetails)
+// app.use("/productDetails",productDetails)
 app.use("/apply_now",apply_now);
 app.use("/contact_us",contact_us);
 app.use("/solution",solution);
@@ -70,6 +71,7 @@ app.use("/Further",Further);
 app.use("/Social",Social);
 app.use("/News1",News);
 app.use("/Special",Special);
+// app.use("/Product_Image",Product_Image)
 
 
 

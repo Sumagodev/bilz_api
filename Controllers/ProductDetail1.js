@@ -1,21 +1,20 @@
-// // controllers/productDetailController.js
-const ProductDetail = require('../Models/ProductImage');
+// controllers/productDetailController.js
+const ProductDetail = require('../Models/ProductDetail1');
 const Product = require('../Models/ProductName');
 
 // Create new product details for a product
 exports.createProductDetail = async (req, res) => {
     try {
-        const {  title, description, productId } = req.body;
-        const img = req.file ? req.file.path : null;
+        const { description, manufacturer, stock, productId } = req.body;
         const product = await Product.findByPk(productId);
         if (!product) {
             return res.status(404).json({ message: "Product not found" });
         }
 
         const productDetail = await ProductDetail.create({
-            img,
-            title,
             description,
+            manufacturer,
+            stock,
             productId,
         });
         res.status(201).json(productDetail);
@@ -42,15 +41,15 @@ exports.getProductDetailsByProductId = async (req, res) => {
 // Update product details by ID
 exports.updateProductDetail = async (req, res) => {
     try {
-        const { img, title, description } = req.body;
+        const { description, manufacturer, stock } = req.body;
         const productDetail = await ProductDetail.findByPk(req.params.id);
         if (!productDetail) {
             return res.status(404).json({ message: "Product detail not found" });
         }
 
-        productDetail.img = img;
-        productDetail.title = title;
         productDetail.description = description;
+        productDetail.manufacturer = manufacturer;
+        productDetail.stock = stock;
         await productDetail.save();
         res.status(200).json(productDetail);
     } catch (error) {
