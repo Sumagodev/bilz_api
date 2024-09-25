@@ -9,7 +9,7 @@ const {
   toggleCarrousalDelete
 } = require('../Controllers/carrousel');
 const authenticateToken = require('../middleware/auth');
-const imageRequired = require('../validations/imageValidation');
+// const imageRequired = require('../validations/imageValidation');
 
 const router = express.Router();
 

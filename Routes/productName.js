@@ -31,6 +31,8 @@ const router = express.Router();
 // CRUD routes for products
 router.post('/add',authenticateToken, productController.createProduct);
 router.get('/get', productController.getAllProducts);
+router.get('/find',authenticateToken, productController.getAllProducts);
+
 router.get('/find/:id',authenticateToken, productController.getProductById);
 router.put('/update/:id',authenticateToken, productController.updateProduct);
 router.delete('/isdelete/:id',authenticateToken, productController.deleteProduct);
