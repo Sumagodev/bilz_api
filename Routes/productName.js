@@ -21,7 +21,7 @@
 // module.exports = router;
 const express = require('express');
 const productController = require('../Controllers/ProductName');
-const productDetailController=require('../Controllers/ProductDetail1');
+// const productDetailController=require('../Controllers/ProductDetail1');
 const productImagesController=require('../Controllers/productImagesController');
 const { validateProductName, validateProductNameId } = require('../Validations/productNameValidation');
 const authenticateToken = require('../middleware/auth');
@@ -37,10 +37,10 @@ router.get('/find/:id',authenticateToken, productController.getProductById);
 router.put('/update/:id',authenticateToken, productController.updateProduct);
 router.delete('/isdelete/:id',authenticateToken, productController.deleteProduct);
 
-router.post('/adddetails', productDetailController.createProductDetail);
-router.get('/getdetails/:productId', productDetailController.getProductDetailsByProductId);
-router.put('/updatedetails/:id', productDetailController.updateProductDetail);
-router.delete('/isdeletedetails/:id', productDetailController.deleteProductDetail);
+// router.post('/adddetails', productDetailController.createProductDetail);
+// router.get('/getdetails/:productId', productDetailController.getProductDetailsByProductId);
+// router.put('/updatedetails/:id', productDetailController.updateProductDetail);
+// router.delete('/isdeletedetails/:id', productDetailController.deleteProductDetail);
 
 
 router.post('/addimage',  upload.single('img'),productImagesController.createProductDetail);

@@ -24,7 +24,7 @@ const login = require("./Routes/User");
 const carrousel = require("./Routes/carrousel");
 const home_about =require("./Routes/HeaderContact");
 const productName =require("./Routes/productName");
-// const productDetails =require("./Routes/product_category");
+
 const apply_now = require("./Routes/apply_now");
 const contact_us=require("./Routes/contactPersonRoutes");
 const solution = require("./Routes/eventRoutes");
@@ -53,7 +53,7 @@ app.use("/v_analysis",Analysis)
 app.use("/carrousel", carrousel);
 app.use("/home_about",home_about);
 app.use("/productName",productName);
-// app.use("/productDetails",productDetails)
+
 app.use("/apply_now",apply_now);
 app.use("/contact_us",contact_us);
 app.use("/solution",solution);

@@ -83,7 +83,7 @@
 
 
 const Product = require('../Models/ProductName');
-// const ProductDetail = require('../Models/ProductDetail1');
+
 exports.createProduct = async (req, res) => {
     try {
         const { productName } = req.body;
