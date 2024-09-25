@@ -20,7 +20,7 @@
 // module.exports = router;
 const express = require('express');
 const productController = require('../Controllers/ProductName');
-const productDetailController=require('../Controllers/ProductDetail1');
+
 const { validateProductName, validateProductNameId } = require('../Validations/productNameValidation');
 const authenticateToken = require('../middleware/auth');
 const router = express.Router();
@@ -32,10 +32,10 @@ router.get('/find/:id',authenticateToken, productController.getProductById);
 router.put('/update/:id',authenticateToken, productController.updateProduct);
 router.delete('/isdelete/:id',authenticateToken, productController.deleteProduct);
 
-router.post('/add/details', productDetailController.createProductDetail);
-router.get('/get/:productId', productDetailController.getProductDetailsByProductId);
-router.put('/update/:id', productDetailController.updateProductDetail);
-router.delete('/isdelete/:id', productDetailController.deleteProductDetail);
+// router.post('/add/details', productDetailController.createProductDetail);
+// router.get('/get/:productId', productDetailController.getProductDetailsByProductId);
+// router.put('/update/:id', productDetailController.updateProductDetail);
+// router.delete('/isdelete/:id', productDetailController.deleteProductDetail);
 
 
 module.exports = router;
