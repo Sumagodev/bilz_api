@@ -11,7 +11,7 @@ const authenticateToken = require('../middleware/auth');
 const {
   validateTeamMember,
   validateTeamMemberId,
-} = require('../validations/teamValidation');
+} = require('../Validations/teamValidation');
 
 const router = express.Router();
 

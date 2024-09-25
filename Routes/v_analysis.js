@@ -1,6 +1,6 @@
 const express = require('express');
 const { addHeaderContact, updateHeaderContact, getHeaderContact, isActiveStatus, isDeleteStatus } = require('../Controllers/v_analysis');
-const { validateHeaderContact, validateHeaderContactId } = require('../validations/headerContactValidation');
+const { validateHeaderContact, validateHeaderContactId } = require('../Validations/headerContactValidation');
 const { validationResult } = require('express-validator');
 const apiResponse = require('../helper/apiResponse');
 const authenticateToken = require('../middleware/auth');

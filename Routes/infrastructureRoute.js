@@ -12,7 +12,7 @@ const authenticateToken = require('../middleware/auth');
 const {
   validateEvent,
   validateEventId,
-} = require('../validations/eventValidation');
+} = require('../Validations/eventValidation');
 
 const router = express.Router();
 
