@@ -10,10 +10,13 @@ const loginUser = async (req, res) => {
   }
 
   const { email, password } = req.body;
+  console.log(req.body);
+  
   try {
     const user = await User.findOne({ where: { email } });
     if (!user) {
       return apiResponse.notFoundResponse(res, 'User not found');
+      
     }
 
     if (user.password !== password) {
