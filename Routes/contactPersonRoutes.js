@@ -9,7 +9,7 @@ const {
   toggleContactPersonDelete
 } = require('../Controllers/contactPersonController');
 const authenticateToken = require('../middleware/auth');
-// const imageRequired = require('../Validations/imageValidation');
+const imageRequired = require('../Validations/imageValidation');
 const router = express.Router();
 
 router.post('/add', upload.single('img'), imageRequired, authenticateToken, validateContactPerson, addContactPerson);
