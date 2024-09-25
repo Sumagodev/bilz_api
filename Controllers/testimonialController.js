@@ -1,4 +1,4 @@
-const Testimonial = require("../models/Testimonial");
+const Testimonial = require("../Models/Testimonial");
 const apiResponse = require("../helper/apiResponse");
 
 exports.addTestimonial = async (req, res) => {
