@@ -29,13 +29,15 @@ const router = express.Router();
 
 
 
-router.post('/add',  upload.single('img'),productImagesController.createProductDetail);
-router.get('/get/:productId', productImagesController.getProductDetailsByProductId);
-router.put('/update/:id', productImagesController.updateProductDetail);
-router.get('/find', productImagesController.getAllProductDetails);
+router.post('/add',  upload.single('img'),productImagesController.createServiceDetail);
+router.get('/get/:productId', productImagesController.getServiceDetailsByProductId);
+router.put('/update/:id', productImagesController.updateServiceDetail);
+router.get('/find', productImagesController.getAllServiceDetails);
+router.get('/get', productImagesController.getAllServiceDetails);
 
 
-router.delete('/isdelete/:id', productImagesController.deleteProductDetail);
+router.delete('/isdelete/:id', productImagesController.deleteServiceDetail);
 
 
 module.exports = router;
+

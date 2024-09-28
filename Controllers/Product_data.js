@@ -1,5 +1,5 @@
 // // controllers/productDetailController.js
-const ProductDetail = require('../Models/ProductImage');
+const ProductDetail = require('../Models/Product_data');
 const Product = require('../Models/ProductName');
 const apiResponse = require('../helper/apiResponse');
 
@@ -7,14 +7,14 @@ const apiResponse = require('../helper/apiResponse');
 exports.createProductDetail = async (req, res) => {
     try {
         const {  title, description, productId } = req.body;
-        const img = req.file ? req.file.path : null;
+  
         const product = await Product.findByPk(productId);
         if (!product) {
             return res.status(404).json({ message: "Product not found" });
         }
 
         const productDetail = await ProductDetail.create({
-            img,
+           
             title,
             description,
             productId,
@@ -74,14 +74,14 @@ exports.getAllProductDetails = async (req, res) => {
       });
   
       // Base URL for images
-      const baseUrl = `${req.protocol}://${req.get('host')}/`;
+    //   const baseUrl = `${req.protocol}://${req.get('host')}/`;
   
       // Add base URL to image path for each product detail and include product name
       const productDetailsWithBaseUrl = productDetails.map(productDetail => {
         const product = productDetail.Product; // Access the joined Product data
         return {
           ...productDetail.toJSON(), // Convert Sequelize instance to plain object
-          img: productDetail.img ? baseUrl + productDetail.img.replace(/\\/g, '/') : null, // Add base URL to image
+        //   img: productDetail.img ? baseUrl + productDetail.img.replace(/\\/g, '/') : null, // Add base URL to image
           productName: product ? product.productName : null, // Include the product title (or productName) from the Product table
         };
       });
@@ -97,13 +97,13 @@ exports.getAllProductDetails = async (req, res) => {
 // Update product details by ID
 exports.updateProductDetail = async (req, res) => {
     try {
-        const { img, title, description } = req.body;
+        const {  title, description } = req.body;
         const productDetail = await ProductDetail.findByPk(req.params.id);
         if (!productDetail) {
             return res.status(404).json({ message: "Product detail not found" });
         }
 
-        productDetail.img = img;
+      
         productDetail.title = title;
         productDetail.description = description;
         await productDetail.save();

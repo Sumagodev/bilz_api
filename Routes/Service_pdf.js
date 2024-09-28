@@ -18,6 +18,7 @@ const router = express.Router();
 router.post('/add', uploadFiles, authenticateToken, validateNewsEvent, addNewsEvent);
 router.put('/update/:id', uploadFiles, authenticateToken, validateNewsEvent, validateNewsEventId, updateNewsEvent);
 router.get('/get', getNewsEvents);
+router.get('/find',authenticateToken, getNewsEvents);
 router.put('/isactive/:id', authenticateToken, validateNewsEventId, isActiveStatus);
 router.delete('/isdelete/:id', authenticateToken, validateNewsEventId, isDeleteStatus);
 

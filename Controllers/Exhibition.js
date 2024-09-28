@@ -12,6 +12,7 @@ exports.addInfrastructure = async (req, res) => {
     console.error('Add Exhibition failed', error);
     return apiResponse.ErrorResponse(res, 'Add Exhibition failed');
   }
+  
 };
 
 exports.updateInfrastructure = async (req, res) => {

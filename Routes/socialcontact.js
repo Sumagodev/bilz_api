@@ -8,7 +8,7 @@ const authenticateToken = require('../middleware/auth');
 const router = express.Router();
 
 // Add social contact
-router.post('/create-socialcontact', validateSocialContact, (req, res, next) => {
+router.post('/add', validateSocialContact, (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return apiResponse.validationErrorWithData(res, 'Validation Error', errors.array());
@@ -17,7 +17,7 @@ router.post('/create-socialcontact', validateSocialContact, (req, res, next) => 
 }, addSocialContact);
 
 // Update social contact
-router.put('/socialcontact/:id', authenticateToken, validateSocialContactId, validateSocialContact, (req, res, next) => {
+router.put('/update/:id', authenticateToken, validateSocialContactId, validateSocialContact, (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return apiResponse.validationErrorWithData(res, 'Validation Error', errors.array());
@@ -26,14 +26,14 @@ router.put('/socialcontact/:id', authenticateToken, validateSocialContactId, val
 }, updateSocialContact);
 
 // Get social contacts
-router.get('/get-socialcontacts', getSocialContact);
+router.get('/get', getSocialContact);
 // Get social contacts
-router.get('/find-socialcontacts', authenticateToken, getSocialContact);
+router.get('/find', authenticateToken, getSocialContact);
 
 // Toggle social contact status
-router.put('/isactive-social/:id', authenticateToken, validateSocialContactId, isActiveStatus);
+router.put('/isactive/:id', authenticateToken, validateSocialContactId, isActiveStatus);
 
 // Toggle social contact delete status
-router.delete('/isdelete-social/:id', authenticateToken, validateSocialContactId, isDeleteStatus);
+router.delete('/isdelete/:id', authenticateToken, validateSocialContactId, isDeleteStatus);
 
 module.exports = router;

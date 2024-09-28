@@ -31,7 +31,7 @@ const solution = require("./Routes/eventRoutes");
 const Exhibition =require("./Routes/Exhibition");
 const testimonial = require("./Routes/testimonialRoutes");
 const Service_pdf = require("./Routes/Service_pdf");
-const Our_service = require("./Routes/Our_service");
+// const Our_service = require("./Routes/Our_service");
 const Team =require("./Routes/teamRoutes");
 const Infrastructure = require("./Routes/infrastructureRoute")
 const Analysis = require("./Routes/v_analysis")
@@ -43,7 +43,8 @@ const Further = require("./Routes/further");
 const Social = require("./Routes/socialcontact");
 const News=require("./Routes/News");
 const Special = require("./Routes/Special");
-// const Product_Image= require("./Routes/product_Image")
+const Product_data= require("./Routes/Product_data");
+const Product_data2 =require("./Routes/Product_data2");
 
 
 
@@ -53,14 +54,15 @@ app.use("/v_analysis",Analysis)
 app.use("/carrousel", carrousel);
 app.use("/home_about",home_about);
 app.use("/productName",productName);
-
+app.use("/Product_data",Product_data);
+app.use("/Product_data2",Product_data2);
 app.use("/apply_now",apply_now);
 app.use("/contact_us",contact_us);
 app.use("/solution",solution);
 app.use("/exhibition",Exhibition);
 app.use("/testimonial",testimonial);
 app.use("/Service_pdf",Service_pdf);
-app.use("/Our_service",Our_service);
+// app.use("/Our_service",Our_service);
 app.use("/Team",Team);
 app.use("/Vibration",Infrastructure);
 app.use("/ServiceName",ServiceName);
@@ -96,6 +98,9 @@ const init = async () => {
     console.log(`Server running on port: ${port}`);
   });
 };
+
+
+
 
 init();
 

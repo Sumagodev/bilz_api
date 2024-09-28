@@ -3,11 +3,8 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 const ProductName = require('./ProductName');
 
-const ProductImage = sequelize.define('ProductImage', {
-    img: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
+const ProductData2 = sequelize.define('ProductData2', {
+   
     title: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -26,13 +23,13 @@ const ProductImage = sequelize.define('ProductImage', {
     },
     }, {
     timestamps: true,
-    tableName: 'Product_Image2',
+    tableName: 'Product_Data2',
     });
 
 // Setting up the foreign key
-ProductImage.belongsTo(ProductName, { foreignKey: 'productId', onDelete: 'CASCADE' });
-ProductName.hasOne(ProductImage, { foreignKey: 'productId' });
+ProductData2.belongsTo(ProductName, { foreignKey: 'productId', onDelete: 'CASCADE' });
+ProductName.hasOne(ProductData2, { foreignKey: 'productId' });
 
-module.exports = ProductImage;
+module.exports = ProductData2;
 
 
