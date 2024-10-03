@@ -204,7 +204,7 @@ exports.getAllServiceDetails = async (req, res) => {
 exports.updateServiceDetail = async (req, res) => {
     try {
         const { id } = req.params;
-        const { title, description } = req.body;
+        const { title, description,productId } = req.body;
         const img = req.file ? req.file.path : null;
     
         const serviceDetail = await ServiceDetail.findByPk(id); // Change the variable name to 'serviceDetail'
@@ -215,6 +215,7 @@ exports.updateServiceDetail = async (req, res) => {
         serviceDetail.img = img || serviceDetail.img;
         serviceDetail.title = title;
         serviceDetail.description = description;
+        serviceDetail.productId =productId;
         await serviceDetail.save();
 
         res.status(200).json(serviceDetail);

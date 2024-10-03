@@ -12,8 +12,8 @@ const authenticateToken = require('../middleware/auth');
 const imageRequired = require('../Validations/imageValidation');
 const router = express.Router();
 
-router.post('/add', upload.single('img'), imageRequired, authenticateToken, validateContactPerson, addContactPerson);
-router.put('/update/:id', upload.single('img'), authenticateToken, validateContactPerson, validateContactPersonId, updateContactPerson);
+router.post('/add', upload.single('img'), imageRequired, validateContactPerson, addContactPerson);
+router.put('/update/:id', upload.single('img'), validateContactPerson, validateContactPersonId, updateContactPerson);
 router.get('/get', getContactPersons);
 router.get('/find', authenticateToken, getContactPersons);
 router.put('/isactive/:id', authenticateToken, validateContactPersonId, toggleContactPersonStatus);

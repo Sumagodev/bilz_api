@@ -1,36 +1,54 @@
 // // controllers/productDetailController.js
 const ProductDetail = require('../Models/Product_data');
 const Product = require('../Models/ProductName');
+const Product_Image2 =require('../Models/ProductImage');
 const apiResponse = require('../helper/apiResponse');
 
 // Create new product details for a product
 exports.createProductDetail = async (req, res) => {
-    try {
-        const {  title, description, productId } = req.body;
-  
-        const product = await Product.findByPk(productId);
-        if (!product) {
-            return res.status(404).json({ message: "Product not found" });
-        }
+  try {
+      const { title, description, productId, subproductId } = req.body;
 
-        const productDetail = await ProductDetail.create({
-           
-            title,
-            description,
-            productId,
-        });
-        res.status(201).json(productDetail);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+      console.log("Product ID:", productId);
+      console.log("Sub Product ID:", subproductId);
+
+      const product = await Product.findByPk(productId);
+      if (!product) {
+          console.log("Product not found with ID:", productId);
+          return res.status(404).json({ message: "Product not found" });
+      }
+
+      const product_image2 = await Product_Image2.findByPk(subproductId);
+      if (!product_image2) {
+          console.log("Sub Product not found with ID:", subproductId);
+          return res.status(404).json({ message: "Sub Product not found" });
+      }
+
+      const productDetail = await ProductDetail.create({
+          title,
+          description,
+          productId,
+          subproductId
+      });
+
+      res.status(201).json(productDetail);
+  } catch (error) {
+      console.error("Error:", error.message);
+      res.status(500).json({ message: error.message });
+  }
 };
+
 
 // Get all details for a specific product
 exports.getProductDetailsByProductId = async (req, res) => {
     try {
         const productDetails = await ProductDetail.findAll({
-            where: { productId: req.params.productId }
-        });
+            where: { subproductId: req.params.subproductId },
+            include: [
+              { model: Product, attributes: ['productName'] },
+              { model: Product_Image2, attributes: ['title'] } // Include category name
+          ]
+      });
         if (productDetails.length === 0) {
             return res.status(404).json({ message: "No details found for this product" });
         }
@@ -68,8 +86,9 @@ exports.getAllProductDetails = async (req, res) => {
         include: [
           {
             model: Product, // This performs a JOIN with the Product table
-            attributes: ['productName'], // Only include the 'title' field from the Product table
-          },
+            attributes: ['productName']},
+            { model: Product_Image2, attributes: ['title'] }  // Only include the 'title' field from the Product table
+          
         ],
       });
   
@@ -78,11 +97,13 @@ exports.getAllProductDetails = async (req, res) => {
   
       // Add base URL to image path for each product detail and include product name
       const productDetailsWithBaseUrl = productDetails.map(productDetail => {
-        const product = productDetail.Product; // Access the joined Product data
+        const product = productDetail.Product; 
+        // const product_image2 = productDetail.Product_Image2; // Access the joined Product data
         return {
           ...productDetail.toJSON(), // Convert Sequelize instance to plain object
         //   img: productDetail.img ? baseUrl + productDetail.img.replace(/\\/g, '/') : null, // Add base URL to image
-          productName: product ? product.productName : null, // Include the product title (or productName) from the Product table
+          // productName: product ? product.productName : null, // Include the product title (or productName) from the Product table
+          // title:product_image2 ? product_image2.title:null
         };
       });
   
@@ -95,23 +116,44 @@ exports.getAllProductDetails = async (req, res) => {
   };
   
 // Update product details by ID
+// Update product details by ID
 exports.updateProductDetail = async (req, res) => {
-    try {
-        const {  title, description } = req.body;
-        const productDetail = await ProductDetail.findByPk(req.params.id);
-        if (!productDetail) {
-            return res.status(404).json({ message: "Product detail not found" });
-        }
+  try {
+      const { title, description, productId, subproductId } = req.body;
+      const productDetail = await ProductDetail.findByPk(req.params.id);
+      if (!productDetail) {
+          return res.status(404).json({ message: "Product detail not found" });
+      }
 
       
-        productDetail.title = title;
-        productDetail.description = description;
-        await productDetail.save();
-        res.status(200).json(productDetail);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+      productDetail.title = title;
+      productDetail.description = description;
+      productDetail.productId = productId;
+      productDetail.subproductId = subproductId; // Update categoryId
+      await productDetail.save();
+      res.status(200).json(productDetail);
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
 };
+
+// exports.updateProductDetail = async (req, res) => {
+//     try {
+//         const {  title, description } = req.body;
+//         const productDetail = await ProductDetail.findByPk(req.params.id);
+//         if (!productDetail) {
+//             return res.status(404).json({ message: "Product detail not found" });
+//         }
+
+      
+//         productDetail.title = title;
+//         productDetail.description = description;
+//         await productDetail.save();
+//         res.status(200).json(productDetail);
+//     } catch (error) {
+//         res.status(500).json({ message: error.message });
+//     }
+// };
 
 // Delete product detail by ID
 exports.deleteProductDetail = async (req, res) => {

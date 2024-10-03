@@ -1,6 +1,7 @@
 // // controllers/productDetailController.js
 const ProductDetail = require('../Models/ProductImage');
 const Product = require('../Models/ProductName');
+
 const apiResponse = require('../helper/apiResponse');
 
 // Create new product details for a product
@@ -12,6 +13,8 @@ exports.createProductDetail = async (req, res) => {
         if (!product) {
             return res.status(404).json({ message: "Product not found" });
         }
+
+   
 
         const productDetail = await ProductDetail.create({
             img,
@@ -97,7 +100,7 @@ exports.getAllProductDetails = async (req, res) => {
 // Update product details by ID
 exports.updateProductDetail = async (req, res) => {
     try {
-        const { img, title, description } = req.body;
+        const { img, title, description,productId } = req.body;
         const productDetail = await ProductDetail.findByPk(req.params.id);
         if (!productDetail) {
             return res.status(404).json({ message: "Product detail not found" });
@@ -106,6 +109,7 @@ exports.updateProductDetail = async (req, res) => {
         productDetail.img = img;
         productDetail.title = title;
         productDetail.description = description;
+        productDetail.productId = productId;
         await productDetail.save();
         res.status(200).json(productDetail);
     } catch (error) {

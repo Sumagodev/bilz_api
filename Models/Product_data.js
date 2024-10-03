@@ -2,6 +2,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 const ProductName = require('./ProductName');
+const Product_Image2 =require('./ProductImage');
 
 const ProductData = sequelize.define('ProductData', {
    
@@ -21,6 +22,16 @@ const ProductData = sequelize.define('ProductData', {
         },
         allowNull: false,
     },
+
+    subproductId:
+    {
+        type: DataTypes.INTEGER,
+        references: {
+            model: Product_Image2,
+            key: 'id'
+        },
+        allowNull: false,
+    },
     }, {
     timestamps: true,
     tableName: 'Product_Data',
@@ -29,6 +40,9 @@ const ProductData = sequelize.define('ProductData', {
 // Setting up the foreign key
 ProductData.belongsTo(ProductName, { foreignKey: 'productId', onDelete: 'CASCADE' });
 ProductName.hasOne(ProductData, { foreignKey: 'productId' });
+
+ProductData.belongsTo(Product_Image2, { foreignKey: 'subproductId', onDelete: 'SET NULL' });  // New association with Category
+Product_Image2.hasMany(ProductData, { foreignKey: 'subproductId' });
 
 module.exports = ProductData;
 
