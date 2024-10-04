@@ -26,6 +26,7 @@ const home_about =require("./Routes/HeaderContact");
 const productName =require("./Routes/productName");
 
 const apply_now = require("./Routes/apply_now");
+const job=require("./Routes/job");
 const contact_us=require("./Routes/contactPersonRoutes");
 const solution = require("./Routes/eventRoutes");
 const Exhibition =require("./Routes/Exhibition");
@@ -62,6 +63,7 @@ app.use("/solution",solution);
 app.use("/exhibition",Exhibition);
 app.use("/testimonial",testimonial);
 app.use("/Service_pdf",Service_pdf);
+app.use("/job",job);
 // app.use("/Our_service",Our_service);
 app.use("/Team",Team);
 app.use("/Vibration",Infrastructure);

@@ -98,7 +98,7 @@ exports.getAllProductDetails = async (req, res) => {
       // Add base URL to image path for each product detail and include product name
       const productDetailsWithBaseUrl = productDetails.map(productDetail => {
         const product = productDetail.Product; 
-        // const product_image2 = productDetail.Product_Image2; // Access the joined Product data
+        const product_image2 = productDetail.Product_Image2;  // Access the joined Product data
         return {
           ...productDetail.toJSON(), // Convert Sequelize instance to plain object
         //   img: productDetail.img ? baseUrl + productDetail.img.replace(/\\/g, '/') : null, // Add base URL to image
