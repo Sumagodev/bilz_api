@@ -46,12 +46,17 @@ const News=require("./Routes/News");
 const Special = require("./Routes/Special");
 const Product_data= require("./Routes/Product_data");
 const Product_data2 =require("./Routes/Product_data2");
-
+const distributer=require("./Routes/distributer");
+const feedback =require("./Routes/feedback");
+const contact_form=require("./Routes/contact_form");
 
 
 
 app.use("/auth", login);
-app.use("/v_analysis",Analysis)
+app.use("/v_analysis",Analysis);
+app.use("/distributer",distributer);
+app.use("/feedback",feedback);
+app.use("/contact_form",contact_form);
 app.use("/carrousel", carrousel);
 app.use("/home_about",home_about);
 app.use("/productName",productName);
