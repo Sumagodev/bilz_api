@@ -18,9 +18,14 @@ const SocialContact = sequelize.define("SocialContact", {
     type: DataTypes.STRING,
     allowNull: true,
   },
+ 
   linkedin: {
     type: DataTypes.STRING,
     allowNull: true,
+  },
+  youtube:{
+    type: DataTypes.STRING,
+    allowNull: true
   },
   isActive: {
     type: DataTypes.BOOLEAN,
