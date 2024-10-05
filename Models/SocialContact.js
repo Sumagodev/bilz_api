@@ -27,6 +27,14 @@ const SocialContact = sequelize.define("SocialContact", {
     type: DataTypes.STRING,
     allowNull: true
   },
+  work:{
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  address:{
+    type: DataTypes.STRING,
+    allowNull: true
+  },
   isActive: {
     type: DataTypes.BOOLEAN,
     defaultValue: true,
