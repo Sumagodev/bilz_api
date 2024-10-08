@@ -26,6 +26,10 @@ const productImagesController=require('../Controllers/productImagesController');
 const { validateProductName, validateProductNameId } = require('../Validations/productNameValidation');
 const authenticateToken = require('../middleware/auth');
 const { upload } = require('../middleware/multer');
+const {
+    validateTeamMember,
+    validateTeamMemberId,
+  } = require('../Validations/specail');
 
 const router = express.Router();
 
@@ -36,6 +40,7 @@ router.get('/find',authenticateToken, productController.getAllProducts);
 router.get('/get/:id', productController.getProductById);
 router.get('/find/:id',authenticateToken, productController.getProductById);
 router.put('/update/:id',authenticateToken, productController.updateProduct);
+router.put('/isActivename/:id', authenticateToken, validateTeamMemberId,productController.isActiveStatus);
 router.delete('/isdelete/:id',authenticateToken, productController.deleteProduct);
 
 
@@ -45,7 +50,8 @@ router.post('/adddetails', upload.single('img'),authenticateToken, productImages
 router.get('/getdetails', productImagesController.getAllProductDetails);
 router.get('/finddetails',productImagesController.getAllProductDetails);
 router.get('/getdetails/:productId', productImagesController.getProductDetailsByProductId);
-router.put('/updatedetails/:id',authenticateToken, productImagesController.updateProductDetail);
+router.put('/isactive/:id', authenticateToken, validateTeamMemberId,productImagesController.isActiveStatus);
+router.put('/updatedetails/:id', upload.single('img'),authenticateToken, productImagesController.updateProductDetail);
 router.delete('/isdeletedetails/:id',authenticateToken, productImagesController.deleteProductDetail);
 
 

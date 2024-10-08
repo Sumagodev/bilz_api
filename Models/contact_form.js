@@ -3,10 +3,6 @@ const sequelize = require('../config/database');
 
 const Distributer = sequelize.define('contact_data', {
 
-   
-
-
-
   name: {
     type: DataTypes.STRING,
     allowNull: false,

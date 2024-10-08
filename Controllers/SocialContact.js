@@ -27,6 +27,35 @@ exports.addSocialContact = async (req, res) => {
   }
 };
 
+// exports.updateSocialContact = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     const socialContact = await SocialContact.findByPk(id);
+    
+//     if (!socialContact) {
+//       return apiResponse.notFoundResponse(res, "Social contact not found");
+//     }
+
+//     socialContact.instagram = instagram,
+//     socialContact.facebook = facebook,
+//     socialContact.email = email,
+//     socialContact.whatsapp = whatsapp,
+//     socialContact.linkedin = linkedin,
+//     socialContact.youtube= youtube,
+//     socialContact.work= work,
+//     socialContact.address= address
+//     await socialContact.save();
+    
+//     return apiResponse.successResponseWithData(
+//       res,
+//       "Social contact updated successfully",
+//       socialContact
+//     );
+//   } catch (error) {
+//     console.log("Update social contact failed", error);
+//     return apiResponse.ErrorResponse(res, "Update social contact failed");
+//   }
+// };
 exports.updateSocialContact = async (req, res) => {
   try {
     const { id } = req.params;
@@ -36,14 +65,19 @@ exports.updateSocialContact = async (req, res) => {
       return apiResponse.notFoundResponse(res, "Social contact not found");
     }
 
-    socialContact.instagram = req.body.instagram;
-    socialContact.facebook = req.body.facebook;
-    socialContact.email = req.body.email;
-    socialContact.whatsapp = req.body.whatsapp;
-    socialContact.linkedin = req.body.linkedin;
-    socialContact.youtube=req.body.youtube;
-    socialContact.work=req.body.work;
-    socialContact.address=req.body.address;
+    // Destructure the body to get the fields
+    const { instagram, facebook, email, whatsapp, linkedin, youtube, work, address } = req.body;
+
+    // Update the social contact fields
+    socialContact.instagram = instagram;
+    socialContact.facebook = facebook;
+    socialContact.email = email;
+    socialContact.whatsapp = whatsapp;
+    socialContact.linkedin = linkedin;
+    socialContact.youtube = youtube;
+    socialContact.work = work;
+    socialContact.address = address;
+
     await socialContact.save();
     
     return apiResponse.successResponseWithData(

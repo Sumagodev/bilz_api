@@ -119,13 +119,13 @@ exports.getAllProductDetails = async (req, res) => {
 // Update product details by ID
 exports.updateProductDetail = async (req, res) => {
   try {
-      const { title, description, productId, subproductId } = req.body;
+     
       const productDetail = await ProductDetail.findByPk(req.params.id);
       if (!productDetail) {
           return res.status(404).json({ message: "Product detail not found" });
       }
 
-      
+      const { title, description, productId, subproductId } = req.body;
       productDetail.title = title;
       productDetail.description = description;
       productDetail.productId = productId;
@@ -168,3 +168,21 @@ exports.deleteProductDetail = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+exports.isActiveStatus = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const productDetail = await ProductDetail.findByPk(id);
+  
+      if (!productDetail) {
+        return apiResponse.notFoundResponse(res, 'productDetail not found');
+      }
+  
+      productDetail.isActive = !productDetail.isActive;
+      await productDetail.save();
+  
+      res.status(200).json(productDetail);
+    } catch (error) {
+      console.error('Toggle productDetail active status failed', error);
+      return apiResponse.ErrorResponse(res, 'Toggle productDetail active status failed');
+    }
+  };

@@ -11,7 +11,7 @@ const router = express.Router();
 router.post('/add',authenticateToken,productImagesController.createProductDetail);
 router.get('/get/:subproductId', productImagesController.getProductDetailsByProductId);
 router.get('/find',authenticateToken, productImagesController.getAllProductDetails);
-
+router.put('/isactive/:id', authenticateToken, validateProductNameId, productImagesController.isActiveStatus);
 router.get('/get', productImagesController.getAllProductDetails);
 
 

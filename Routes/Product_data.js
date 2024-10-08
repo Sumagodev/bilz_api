@@ -3,7 +3,10 @@ const express = require('express');
 const productImagesController=require('../Controllers/Product_data');
 const { validateProductName, validateProductNameId } = require('../Validations/productNameValidation');
 const authenticateToken = require('../middleware/auth');
-
+const {
+    validateTeamMember,
+    validateTeamMemberId,
+  } = require('../Validations/specail');
 const router = express.Router();
 
 
@@ -16,7 +19,7 @@ router.get('/get', productImagesController.getAllProductDetails);
 
 
 router.put('/update/:id', productImagesController.updateProductDetail);
-
+router.put('/isactive/:id', authenticateToken,validateTeamMemberId, productImagesController.isActiveStatus);
 
 
 

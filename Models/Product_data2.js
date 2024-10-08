@@ -67,6 +67,10 @@ const ProductData2 = sequelize.define('ProductData2', {
         },
         allowNull: false,
     },
+    isActive: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+      },
     }, {
     timestamps: true,
     tableName: 'Product_Data2',
@@ -76,7 +80,7 @@ const ProductData2 = sequelize.define('ProductData2', {
 ProductData2.belongsTo(ProductName, { foreignKey: 'productId', onDelete: 'CASCADE' });
 ProductName.hasOne(ProductData2, { foreignKey: 'productId' });
 
-ProductData2.belongsTo(Product_Image2, { foreignKey: 'subproductId', onDelete: 'SET NULL' });  // New association with Category
+ProductData2.belongsTo(Product_Image2, { foreignKey: 'subproductId', onDelete: 'CASCADE' });  // New association with Category
 Product_Image2.hasMany(ProductData2, { foreignKey: 'subproductId' });
 
 module.exports = ProductData2;

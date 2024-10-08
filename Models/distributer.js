@@ -3,11 +3,7 @@ const sequelize = require('../config/database');
 
 const Distributer = sequelize.define('distributer', {
 
-   
-
-
-
-  name: {
+   name: {
     type: DataTypes.STRING,
     allowNull: false,
   },

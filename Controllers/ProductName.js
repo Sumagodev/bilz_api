@@ -147,6 +147,26 @@ exports.deleteProduct = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+
+exports.isActiveStatus = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const product = await Product.findByPk(id);
+  
+      if (!product) {
+        return apiResponse.notFoundResponse(res, 'Product not found');
+      }
+  
+      product.isActive = !product.isActive;
+      await product.save();
+  
+      res.status(200).json(product);
+    } catch (error) {
+      console.error('Toggle Product active status failed', error);
+      return apiResponse.ErrorResponse(res, 'Toggle Product active status failed');
+    }
+  };
 // Create Product with ProductDetail
 // exports.createProduct = async (req, res) => {
 //     try {

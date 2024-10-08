@@ -24,6 +24,10 @@ const ProductImage = sequelize.define('ProductImage', {
         },
         allowNull: false,
     },
+    isActive: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+      },
     }, {
     timestamps: true,
     tableName: 'Product_Image2',
