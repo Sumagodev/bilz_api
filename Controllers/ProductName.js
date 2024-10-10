@@ -83,11 +83,13 @@
 
 
 const Product = require('../Models/ProductName');
+const apiResponse = require('../helper/apiResponse');
 
 exports.createProduct = async (req, res) => {
     try {
         const { productName } = req.body;
-        const product = await Product.create({ productName});
+        const img = req.file ? req.file.path : null;
+        const product = await Product.create({ productName,img});
         res.status(201).json(product);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -95,14 +97,35 @@ exports.createProduct = async (req, res) => {
 };
 
 // Get all products
+// exports.getAllProducts = async (req, res) => {
+//     try {
+//         const products = await Product.findAll();
+//         res.status(200).json(products);
+//     } catch (error) {
+//         res.status(500).json({ message: error.message });
+//     }
+// };
 exports.getAllProducts = async (req, res) => {
     try {
-        const products = await Product.findAll();
-        res.status(200).json(products);
+      const products = await Product.findAll({ where: { isDelete: false } });
+  
+      const baseUrl = `${req.protocol}://${req.get('host')}/`;
+      const productsWithBaseUrl = products.map(products => {
+        return {
+          ...products.toJSON(),
+          img: products.img ? baseUrl + products.img.replace(/\\/g, '/') : null
+        };
+      });
+    //   return res.status(200).json({
+    //     message: 'Product retrieved successfully',
+    //     data: productsWithBaseUrl
+    //   });
+      return apiResponse.successResponseWithData(res, 'Apply now retrieved successfully', productsWithBaseUrl);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+      console.error('Get Apply now failed', error);
+      return apiResponse.ErrorResponse(res, 'Get Apply now failed');
     }
-};
+  };
 
 // Get a product by ID
 exports.getProductById = async (req, res) => {
@@ -121,11 +144,13 @@ exports.getProductById = async (req, res) => {
 exports.updateProduct = async (req, res) => {
     try {
         const { productName} = req.body;
+        const img = req.file ? req.file.path : null;
         const product = await Product.findByPk(req.params.id);
         if (!product) {
             return res.status(404).json({ message: "Product not found" });
         }
         product.productName = productName;
+        product.img = img || product.img;
         
         await product.save();
         res.status(200).json(product);

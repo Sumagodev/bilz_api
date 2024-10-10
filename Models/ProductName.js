@@ -6,6 +6,10 @@ const ProductName = sequelize.define('ProductName', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  img: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   isActive: {
     type: DataTypes.BOOLEAN,
     defaultValue: true,

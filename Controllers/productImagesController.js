@@ -85,7 +85,7 @@ exports.getAllProductDetails = async (req, res) => {
         return {
           ...productDetail.toJSON(), // Convert Sequelize instance to plain object
           img: productDetail.img ? baseUrl + productDetail.img.replace(/\\/g, '/') : null, // Add base URL to image
-          productName: product ? product.productName : null, // Include the product title (or productName) from the Product table
+          // productName: product ? product.productName : null, // Include the product title (or productName) from the Product table
         };
       });
   

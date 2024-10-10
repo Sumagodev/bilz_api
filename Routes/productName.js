@@ -32,14 +32,16 @@ const {
   } = require('../Validations/specail');
 
 const router = express.Router();
+// const { upload } = require('../middleware/multer');
+
 
 // CRUD routes for products
-router.post('/add',authenticateToken, productController.createProduct);
+router.post('/add',upload.single('img'),authenticateToken, productController.createProduct);
 router.get('/get', productController.getAllProducts);
 router.get('/find',authenticateToken, productController.getAllProducts);
 router.get('/get/:id', productController.getProductById);
 router.get('/find/:id',authenticateToken, productController.getProductById);
-router.put('/update/:id',authenticateToken, productController.updateProduct);
+router.put('/update/:id',upload.single('img'),authenticateToken, productController.updateProduct);
 router.put('/isActivename/:id', authenticateToken, validateTeamMemberId,productController.isActiveStatus);
 router.delete('/isdelete/:id',authenticateToken, productController.deleteProduct);
 
