@@ -15,6 +15,7 @@ const ServiceDetail = sequelize.define('ServiceDetail', {
         type: DataTypes.TEXT,
         allowNull: false,
     },
+  
     productId: {
         type: DataTypes.INTEGER,
         references: {
@@ -23,6 +24,10 @@ const ServiceDetail = sequelize.define('ServiceDetail', {
         },
         allowNull: false,
     },
+    isActive: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+      },
 }, {
     timestamps: true,
     tableName: 'service_details',

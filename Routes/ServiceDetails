@@ -32,9 +32,9 @@ const router = express.Router();
 router.post('/add',  upload.single('img'),productImagesController.createServiceDetail);
 router.get('/get/:productId', productImagesController.getServiceDetailsByProductId);
 router.put('/update/:id', productImagesController.updateServiceDetail);
-router.get('/find', productImagesController.getAllServiceDetails);
+router.get('/find',authenticateToken, productImagesController.getAllServiceDetails);
 router.get('/get', productImagesController.getAllServiceDetails);
-
+router.put('/isactive/:id', authenticateToken, validateProductNameId, productImagesController.isActiveStatus);
 
 router.delete('/isdelete/:id', productImagesController.deleteServiceDetail);
 

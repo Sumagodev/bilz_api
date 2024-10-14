@@ -238,3 +238,21 @@ exports.deleteServiceDetail = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+exports.isActiveStatus = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const serviceDetail = await ServiceDetail.findByPk(id);
+  
+      if (!serviceDetail) {
+        return apiResponse.notFoundResponse(res, 'Product not found');
+      }
+  
+      serviceDetail.isActive = !serviceDetail.isActive;
+      await serviceDetail.save();
+  
+      res.status(200).json(serviceDetail);
+    } catch (error) {
+      console.error('Toggle Product active status failed', error);
+      return apiResponse.ErrorResponse(res, 'Toggle Product active status failed');
+    }
+  };
